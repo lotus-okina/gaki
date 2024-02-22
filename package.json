@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dev": "wrangler dev --assets src/",
-    "deploy": "wrangler deploy --minify"
+    "dev": "wrangler pages dev src",
+    "deploy": "wrangler pages deploy src"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240208.0",

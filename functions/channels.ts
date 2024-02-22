@@ -5,6 +5,21 @@ interface Env {
 }
 
 export const onRequestGet: PagesFunction<Env> = async (context) => {
+  const env = context.env;
+  if (
+    env.DISCORD_API_TOKEN == null ||
+    env.CHANNELS_ACCESS_TOKEN == null ||
+    env.GUILD_ID == null
+  ) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "サーバ設定エラー",
+      }),
+      { status: 500, statusText: "Internal Server Error" }
+    );
+  }
+
   // check token
   const access_token_expected = context.env.CHANNELS_ACCESS_TOKEN;
   const access_token_actual = context.request.headers.get("Authorization");

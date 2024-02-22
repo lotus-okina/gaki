@@ -4,15 +4,24 @@ interface Env {
   PASSWORD: string;
 }
 
-interface Data extends Record<string, string> {
-  channel_id: string;
-  message: string;
-  password: string;
-}
+export const onRequestPost: PagesFunction<Env> = async (context) => {
+  const env = context.env;
+  if (
+    env.DISCORD_API_TOKEN == null ||
+    env.POST_ACCESS_TOKEN == null ||
+    env.PASSWORD == null
+  ) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "サーバ設定エラー",
+      }),
+      { status: 500, statusText: "Internal Server Error" }
+    );
+  }
 
-export const onRequestPost: PagesFunction<Env, any, Data> = async (context) => {
   // check token
-  const access_token_expected = context.env.POST_ACCESS_TOKEN;
+  const access_token_expected = env.POST_ACCESS_TOKEN;
   const access_token_actual = context.request.headers.get("Authorization");
   if (access_token_expected !== access_token_actual) {
     return new Response(
@@ -24,9 +33,22 @@ export const onRequestPost: PagesFunction<Env, any, Data> = async (context) => {
     );
   }
 
-  const data = context.data;
+  const data = await context.request.json();
+  if (
+    data.password == null ||
+    data.channel_id == null ||
+    data.message == null
+  ) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: "パラメータ不足",
+      }),
+      { status: 400, statusText: "Bad Request" }
+    );
+  }
   // check password
-  const password_expected = context.env.PASSWORD;
+  const password_expected = env.PASSWORD;
   const password_actual = data.password;
   if (password_expected !== password_actual) {
     return new Response(
@@ -39,13 +61,12 @@ export const onRequestPost: PagesFunction<Env, any, Data> = async (context) => {
   }
 
   // post message to Discord
-  console.log(data);
   const res = fetch(
     `https://discord.com/api/v10/channels/${data.channel_id}/messages`,
     {
       method: "POST",
       headers: {
-        Authorization: `Bot ${context.env.DISCORD_API_TOKEN}`,
+        Authorization: `Bot ${env.DISCORD_API_TOKEN}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

@@ -5,11 +5,11 @@ const POST_COLLECTOR = "/post";
 const CHANNELS_ACCESS_TOKEN = "kore-is-the-most-anzen-tookun-nari-ne";
 const POST_ACCESS_TOKEN = "this-wa-mottomo-secure-token-aru-yo";
 
-let channelSelector = null
-const postButton = document.getElementById("post");
-const messageBox = document.getElementById("message");
-const passwordBox = document.getElementById("password");
-const resultParagraph = document.getElementById("result");
+let channelSelector
+let postButton
+let messageBox
+let passwordBox
+let resultArticle
 
 function loadChannels() {
   const req = new Request(
@@ -62,16 +62,16 @@ async function processResponse(promise) {
     // TODO: スレッドを目立たせる
     channelSelector.appendChild(option);
   }
-  postButton.disabled = false;
   document.getElementById("chan-placeholder").remove()
   document.getElementById("chan-label").appendChild(channelSelector);
+  checkMessageBox()
 }
 
 function doPost() {
   postButton.disabled = true;
   postButton.ariaBusy = true;
-  resultParagraph.innerText = "";
-  resultParagraph.style.visibility = "hidden";
+  resultArticle.innerText = "";
+  resultArticle.style.visibility = "hidden";
   const req = new Request(POST_COLLECTOR, {
     method: "POST",
     headers: {
@@ -89,17 +89,17 @@ function doPost() {
 
 function setResult(success, message = null) {
   if (success === true) {
-    resultParagraph.innerText = "投稿されました";
-    resultParagraph.classList.value = "pico-background-azure-500"
+    resultArticle.innerText = "投稿されました";
+    resultArticle.classList.value = "pico-background-azure-500"
   } else {
-    resultParagraph.classList.value = "pico-background-red-500"
+    resultArticle.classList.value = "pico-background-red-500"
     if (message != null) {
-      resultParagraph.innerText = message;
+      resultArticle.innerText = message;
     } else {
-      resultParagraph.innerText = "投稿に失敗しました";
+      resultArticle.innerText = "投稿に失敗しました";
     }
   }
-  resultParagraph.style.visibility = "visible";
+  resultArticle.style.visibility = "visible";
   postButton.disabled = false;
   postButton.ariaBusy = false;
 }
@@ -117,8 +117,14 @@ async function processPostResult(promise) {
 
   if (!response.ok) {
     console.error("fetch error:", response.statusText);
-    console.error("body:", await response.text());
-    setResult(false)
+    const body = await response.text()
+    console.error("body:", body);
+    try {
+      const data = JSON.parse(body)
+      setResult(false, data.message)
+    } catch {
+      setResult(false)
+    }
     return
   }
 
@@ -139,7 +145,7 @@ async function processPostResult(promise) {
     let message;
     if (data?.message) {
       message = data.message;
-      console.log("process error:", data)
+      console.error("process error:", data)
     } else {
       message = null
       console.error("fetch error:", data);
@@ -148,7 +154,16 @@ async function processPostResult(promise) {
   }
 }
 
-window.onload = () => {
-  loadChannels();
+function checkMessageBox() {
+  postButton.disabled = (messageBox.value.length === 0);
+}
+
+window.onload = async () => {
+  postButton = document.getElementById("post");
+  messageBox = document.getElementById("message");
+  passwordBox = document.getElementById("password");
+  resultArticle = document.getElementById("result");
   postButton.onclick = doPost;
+  messageBox.addEventListener("input", checkMessageBox)
+  loadChannels();
 }
