@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <title>𝔊𝔄𝔎ℑ</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css"
+  />
+</head>
+<html color-mode="user">
+  <style type="text/css">
+    header,
+    main {
+      padding: 0rem 1rem;
+    }
+  </style>
+  <header>
+    <h1>𝔊𝔄𝔎ℑ</h1>
+  </header>
+  <main>
+    <label id="chan-label">
+      チャンネル/スレッド
+      <article id="chan-placeholder" aria-busy="true"></article>
+    </label>
+    <label>
+      メッセージ
+      <textarea id="message" placeholder="メッセージを入力……"></textarea>
+    </label>
+    <label>
+      パスワード
+      <input id="password" type="password" placeholder="パスワードを入力……" />
+    </label>
+    <button
+      class="pico-background-jade-500"
+      disabled
+      autocomplete="off"
+      id="post"
+    >
+      投稿
+    </button>
+    <article id="result" style="margin: 2rem; visibility: hidden"></article>
+  </main>
+  <script src="./index.js"></script>
+</html>
