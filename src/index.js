@@ -141,6 +141,7 @@ async function processPostResult(promise) {
   if (data?.success === true) {
     setResult(true)
     messageBox.value = "";
+    checkMessageBox()
   } else {
     let message;
     if (data?.message) {

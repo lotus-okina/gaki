@@ -33,7 +33,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     );
   }
 
-  const data = await context.request.json();
+  const data: { password: string; channel_id: string; message: string } =
+    await context.request.json();
   if (
     data.password == null ||
     data.channel_id == null ||
