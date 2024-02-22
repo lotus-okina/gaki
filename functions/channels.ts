@@ -40,6 +40,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
   );
   const json: any[] = await res.json();
 
+  // TODO: Botからは見えないチャンネルを消す
   const allowedTypes = [
     0, // GUILD_TEXT
     11, // PUBLIC_THREAD

@@ -2,6 +2,7 @@
 const CHANNEL_PROVIDER = "/channels";
 const POST_COLLECTOR = "/post";
 
+// フールプルーフのトークン
 const CHANNELS_ACCESS_TOKEN = "kore-is-the-most-anzen-tookun-nari-ne";
 const POST_ACCESS_TOKEN = "this-wa-mottomo-secure-token-aru-yo";
 
@@ -72,6 +73,7 @@ function doPost() {
   postButton.ariaBusy = true;
   resultArticle.innerText = "";
   resultArticle.style.visibility = "hidden";
+  const message = preprocessMessage(messageBox.value);
   const req = new Request(POST_COLLECTOR, {
     method: "POST",
     headers: {
@@ -80,11 +82,19 @@ function doPost() {
     },
     body: JSON.stringify({
       "channel_id": channelSelector.value,
-      "message": messageBox.value,
+      "message": message,
       "password": passwordBox.value,
     })
   });
   processPostResult(fetch(req));
+}
+
+function preprocessMessage(message) {
+  // Discordの埋め込み対策サイトに置換する
+  return message
+    .replaceAll("https://twitter.com/", "https://fxtwitter.com/")
+    .replaceAll("https://x.com/", "https://fixupx.com/")
+    .replaceAll("https://www.pixiv.net/", "https://www.phixiv.net/")
 }
 
 function setResult(success, message = null) {
