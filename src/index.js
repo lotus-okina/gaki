@@ -1,6 +1,8 @@
 // biome-ignore lint/suspicious/noRedundantUseStrict: browser script
 "use strict";
 
+/** @import {PostRequest, ChannelsResponse} from "../types.d.ts" */
+
 const CHANNEL_PROVIDER = "/channels";
 const POST_COLLECTOR = "/post";
 
@@ -16,7 +18,6 @@ let resultArticle;
 
 function loadChannels() {
 	const req = new Request(CHANNEL_PROVIDER, {
-		// biome-ignore lint/style/useNamingConvention: HTTP header name
 		headers: { Authorization: CHANNELS_ACCESS_TOKEN },
 	});
 	processResponse(fetch(req));
@@ -47,6 +48,7 @@ async function processResponse(promise) {
 		return;
 	}
 
+	/** @type {ChannelsResponse} */
 	let data;
 	try {
 		data = await response.json();
@@ -58,12 +60,27 @@ async function processResponse(promise) {
 	}
 
 	channelSelector = document.createElement("select");
-	for (const chan of data?.channels) {
-		const option = document.createElement("option");
-		option.value = chan.id;
-		option.innerText = chan.name;
-		// TODO: スレッドを目立たせる
-		channelSelector.appendChild(option);
+	console.log(data);
+	for (const category of data.categories) {
+		if (category.name == null) {
+			// カテゴリに属さないチャンネル
+			for (const chan of category.channels) {
+				const option = document.createElement("option");
+				option.value = chan.id;
+				option.innerText = chan.name;
+				channelSelector.appendChild(option);
+			}
+		} else {
+			const categoryOptGroup = document.createElement("optgroup");
+			categoryOptGroup.label = category.name;
+			for (const chan of category.channels) {
+				const option = document.createElement("option");
+				option.value = chan.id;
+				option.innerText = chan.name;
+				categoryOptGroup.appendChild(option);
+			}
+			channelSelector.appendChild(categoryOptGroup);
+		}
 	}
 	document.getElementById("chan-placeholder").remove();
 	document.getElementById("chan-label").appendChild(channelSelector);
@@ -75,19 +92,22 @@ function doPost() {
 	postButton.ariaBusy = true;
 	resultArticle.innerText = "";
 	resultArticle.style.visibility = "hidden";
+
 	const message = preprocessMessage(messageBox.value);
+	/** @type {PostRequest} */
+	const body = {
+		channelId: channelSelector.value,
+		message: message,
+		password: passwordBox.value,
+	};
+
 	const req = new Request(POST_COLLECTOR, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			// biome-ignore lint/style/useNamingConvention: HTTP header name
 			Authorization: POST_ACCESS_TOKEN,
 		},
-		body: JSON.stringify({
-			channelId: channelSelector.value,
-			message: message,
-			password: passwordBox.value,
-		}),
+		body: JSON.stringify(body),
 	});
 	processPostResult(fetch(req));
 }

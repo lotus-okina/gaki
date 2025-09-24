@@ -1,9 +1,8 @@
+import type { PostRequest } from "../types.d.ts";
+
 interface Env {
-	// biome-ignore lint/style/useNamingConvention: external env var
 	DISCORD_API_TOKEN: string;
-	// biome-ignore lint/style/useNamingConvention: external env var
 	POST_ACCESS_TOKEN: string;
-	// biome-ignore lint/style/useNamingConvention: external env var
 	PASSWORD: string;
 }
 
@@ -36,8 +35,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 		);
 	}
 
-	const data: { password: string; channelId: string; message: string } =
-		await context.request.json();
+	const data: PostRequest = await context.request.json();
 	if (data.password == null || data.channelId == null || data.message == null) {
 		return new Response(
 			JSON.stringify({
@@ -66,7 +64,6 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 		{
 			method: "POST",
 			headers: {
-				// biome-ignore lint/style/useNamingConvention: HTTP header name
 				Authorization: `Bot ${env.DISCORD_API_TOKEN}`,
 				"Content-Type": "application/json",
 			},
@@ -78,8 +75,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
 	const resp = await res;
 	if (!resp.ok) {
-		console.error(resp.status, resp.statusText);
-		console.error(await resp.json());
+		console.error(
+			"メッセージ送信失敗",
+			`${resp.status} ${resp.statusText}`,
+			await resp.text(),
+		);
 		return new Response(
 			JSON.stringify({
 				success: false,

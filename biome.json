@@ -20,7 +20,9 @@
 		"rules": {
 			"recommended": true,
 			"a11y": "on",
-			"complexity": "on",
+			"complexity": {
+				"noExcessiveLinesPerFunction": "off"
+			},
 			"correctness": "on",
 			"nursery": {
 				"noSecrets": "off"
