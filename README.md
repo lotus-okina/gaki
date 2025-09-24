@@ -26,6 +26,10 @@ Cloudflare Pages の使用を前提に開発しています。
 - Read Messages/View Channels
 - Send Messages
 
+### 開発環境の前提
+
+node を使用します。バージョンの制約はないので、適当にググってインストールしてください。
+
 ### ローカル実行
 
 #### 環境変数定義

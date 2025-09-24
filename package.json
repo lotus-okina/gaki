@@ -1,11 +1,15 @@
 {
-  "scripts": {
-    "dev": "wrangler pages dev src",
-    "deploy": "wrangler pages deploy src"
-  },
-  "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240208.0",
-    "wrangler": "^3.25.0",
-    "typescript": "^5.3.3"
-  }
+	"scripts": {
+		"dev": "wrangler pages dev src",
+		"deploy": "wrangler pages deploy src",
+		"fmt": "biome format --write; prettier \"**/*.{html,md}\" --write",
+		"lint": "biome lint"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.2.4",
+		"@cloudflare/workers-types": "^4.20250924.0",
+		"prettier": "^3.6.2",
+		"typescript": "^5.9.2",
+		"wrangler": "^4.39.0"
+	}
 }
