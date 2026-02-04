@@ -109,6 +109,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 		cf_ip_country: req.headers.get("CF-IPCountry") || "unknown",
 		cf_asn: cf?.asn || "unknown",
 		cf_colo: cf?.colo || "unknown",
+		user_agent: req.headers.get("User-Agent") || "unknown",
 		body: JSON.stringify(data),
 	};
 
