@@ -97,6 +97,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 	}
 
 	// 発信者ログ生成
+	delete data.password; // パスワードはログに含めない
 	const req = context.request;
 	const cf = req.cf;
 	const accessLog = {
