@@ -1,8 +1,8 @@
 import type { Category, Channel, ChannelsResponse } from "../types.d.ts";
 
 interface Env {
-	DISCORD_API_TOKEN: string;
 	CHANNELS_ACCESS_TOKEN: string;
+	DISCORD_API_TOKEN: string;
 	GUILD_ID: string;
 }
 

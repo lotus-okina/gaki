@@ -3,8 +3,9 @@ compatibility_date = "2026-02-04"
 
 pages_build_output_dir = "src"
 
-# [vars]
-# MY_VARIABLE = "production_value"
+[vars]
+CHANNELS_ACCESS_TOKEN = "kore-is-the-most-anzen-tookun-nari-ne"
+POST_ACCESS_TOKEN = "this-wa-mottomo-secure-token-aru-yo"
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"

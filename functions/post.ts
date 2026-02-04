@@ -2,10 +2,10 @@ import type { PostRequest } from "../types.d.ts";
 
 interface Env {
 	DISCORD_API_TOKEN: string;
-	POST_ACCESS_TOKEN: string;
-	PASSWORD: string;
-	LOG_ENDPOINT_URL: string;
 	LOG_ENDPOINT_SECRET: string;
+	LOG_ENDPOINT_URL: string;
+	PASSWORD: string;
+	POST_ACCESS_TOKEN: string;
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
