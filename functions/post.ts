@@ -4,9 +4,12 @@ interface Env {
 	DISCORD_API_TOKEN: string;
 	POST_ACCESS_TOKEN: string;
 	PASSWORD: string;
+	LOG_ENDPOINT_URL: string;
+	LOG_ENDPOINT_SECRET: string;
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
+	const timestamp = new Date();
 	const env = context.env;
 	if (
 		env.DISCORD_API_TOKEN == null ||
@@ -36,7 +39,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 	}
 
 	const data: PostRequest = await context.request.json();
-	if (data.password == null || data.channelId == null || data.message == null) {
+	if (
+		data.password == null ||
+		data.channelId == null ||
+		data.message == null
+	) {
 		return new Response(
 			JSON.stringify({
 				success: false,
@@ -88,5 +95,33 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 			{ status: 500, statusText: "Internal Server Error" },
 		);
 	}
+
+	// 発信者ログ生成
+	const req = context.request;
+	const cf = req.cf;
+	const accessLog = {
+		timestamp_str: timestamp.toISOString(),
+		timestamp_unix: timestamp.getTime(),
+		client_ip: req.headers.get("CF-Connecting-IP") || "unknown",
+		client_ipv6: req.headers.get("CF-Connecting-IPv6") || "unknown",
+		x_forwarded_for: req.headers.get("X-Forwarded-For") || "unknown",
+		cf_ray: req.headers.get("CF-Ray") || "unknown",
+		cf_ip_country: req.headers.get("CF-IPCountry") || "unknown",
+		cf_asn: cf?.asn || "unknown",
+		cf_colo: cf?.colo || "unknown",
+		body: JSON.stringify(data),
+	};
+
+	context.waitUntil(
+		fetch(env.LOG_ENDPOINT_URL, {
+			method: "POST",
+			headers: {
+				Authorization: `Bearer ${env.LOG_ENDPOINT_SECRET}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(accessLog),
+		}),
+	);
+
 	return new Response(JSON.stringify({ success: true }));
 };
