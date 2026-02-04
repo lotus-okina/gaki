@@ -2,13 +2,13 @@
 	"scripts": {
 		"dev": "wrangler pages dev src",
 		"deploy": "wrangler pages deploy src",
-		"fmt": "biome format --write; prettier \"**/*.{html,md}\" --write",
-		"lint": "biome lint"
+		"fmt": "oxfmt",
+		"lint": "oxlint --fix"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.2.4",
 		"@cloudflare/workers-types": "^4.20250924.0",
-		"prettier": "^3.6.2",
+		"oxfmt": "^0.28.0",
+		"oxlint": "^1.43.0",
 		"typescript": "^5.9.2",
 		"wrangler": "^4.39.0"
 	}

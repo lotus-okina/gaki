@@ -141,7 +141,10 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 			} else if (categoryId in categories) {
 				categories[categoryId].channels.push(channelObj);
 			} else {
-				console.warn("未取得のカテゴリに属するチャンネルを無視します", channel);
+				console.warn(
+					"未取得のカテゴリに属するチャンネルを無視します",
+					channel,
+				);
 			}
 		}
 	}
@@ -157,7 +160,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 				if (parentChannel.parent_id == null) {
 					uncategorized.channels.push(threadObj);
 				} else if (parentChannel.parent_id in categories) {
-					categories[parentChannel.parent_id].channels.push(threadObj);
+					categories[parentChannel.parent_id].channels.push(
+						threadObj,
+					);
 				} else {
 					console.warn(
 						"未取得のカテゴリに属するチャンネルを無視します",
@@ -166,7 +171,10 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
 				}
 			} else {
 				// 親チャンネルがない場合は無視
-				console.warn("親チャンネルの存在しないスレッドを無視します", thread);
+				console.warn(
+					"親チャンネルの存在しないスレッドを無視します",
+					thread,
+				);
 			}
 		}
 	}
