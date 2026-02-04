@@ -1,5 +1,7 @@
 name = "gaki"
-compatibility_date = "2023-12-01"
+compatibility_date = "2026-02-04"
+
+pages_build_output_dir = "src"
 
 # [vars]
 # MY_VARIABLE = "production_value"
