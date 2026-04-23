@@ -66,8 +66,11 @@ $ npm run deploy
 - functions: バックエンド
   - channels.ts : チャンネル取得 API
   - post.ts : 投稿 API
+- gcp-function-logging: Cloud Run Functions ログエンドポイント
 
 #### 処理シーケンス
+
+TODO: 外部ログ処理追加
 
 <!-- prettier-ignore -->
 ```mermaid
@@ -95,3 +98,9 @@ sequenceDiagram
     P -->>- F: 
     F -->>- U: 結果表示
 ```
+
+### 外部ログエンドポイントデプロイ
+
+1. ログ保存先バケット作成
+2. Functionsデプロイ、このときにGCSバケット名・ベースディレクトリ・任意トークン設定
+3. Functionsエンドポイント・トークンをPages側のシークレットに追加
