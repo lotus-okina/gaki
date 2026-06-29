@@ -1,6 +1,6 @@
 {
-  "dependencies": {
-    "@google-cloud/functions-framework": "^5.0.0",
-    "@google-cloud/storage": "^7.18.0"
-  }
+	"dependencies": {
+		"@google-cloud/functions-framework": "^5.0.0",
+		"@google-cloud/storage": "^7.18.0"
+	}
 }
