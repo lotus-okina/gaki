@@ -6,10 +6,10 @@
 		"lint": "oxlint --fix"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250924.0",
+		"@cloudflare/workers-types": "^4.20260628.1",
 		"oxfmt": "^0.28.0",
-		"oxlint": "^1.43.0",
-		"typescript": "^5.9.2",
-		"wrangler": "^4.39.0"
+		"oxlint": "^1.71.0",
+		"typescript": "^5.9.3",
+		"wrangler": "^4.105.0"
 	}
 }
